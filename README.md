@@ -11,9 +11,10 @@ A maven plugin that turbo charges your Maven build by only building the projects
  ## Usage
  The plugin has the following parameters:
  
- |parameter name|description|default value|
- |-------------|------------|-------------|
- | enabled  | Enables of disables the plugin. | true |
+ |parameter name| description                                                                                                                  |default value|
+ |------------------------------------------------------------------------------------------------------------------------------|------------|-------------|
+ | enabled  | Enables of disables the plugin.                                                                                              | true |
+ | alwaysBuildModules  | Always build the specified modules. Comma separated. Checked only by doing a contains of the file name in this string        | empty string |
  | ignoreChangesInFiles | Skips build even these files have changed. Comma separated. Checked only by doing a contains of the file name in this string | empty string |
  
  ### Command line parameters
@@ -32,25 +33,14 @@ mvn clean install -Dturbo.enabled=false
     <extensions>true</extensions>
     <configuration>
         <enabled>true</enabled>
+        <alwaysBuildModules>distribution</alwaysBuildModules>
         <ignoreChangesInFiles>swagger.html</ignoreChangesInFiles>
     </configuration>
 </plugin>
 ```
 You typically add the plugin to the plugins section of your root pom. 
 
-You find the latest version of the plugin from the master branch build [here](https://digitalbankbyggmaster.test.sparebank1.no/job/turbo-maven-plugin_master/).
-
 #### Building with the plugin enabled
 The first time you do a build, a normal build will be done, and at the same time, the serialized checksums will be written to your maven repo.
 
 Now, just try trigging a new build, and you will hopefully see your turbo charged build in action?
-
-# Known issues
-This plugin only does its magic locally. It will not break anything on the build server, but it will not speed up anything either. We have to figure out how to handle that each build gets its own version first. There is an issue with shared maven repo on the build slaves we have to cater for. 
-
-We have disabled the plugin on the buildserver for now, by having it disable itself when it sees that the path to the local maven repo is /var/cache/maven_repository.
-
-# It doesn't work for me? What do I do?
-This plugin is still a child, and needs to face the sometimes odd usecases of enterprise development to grow up and become mature.
-
-Please contact vidar.moe@sparebank1.no with bugs for this plugin, improvement suggestions or just to have a chat?
