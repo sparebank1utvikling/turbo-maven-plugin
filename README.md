@@ -38,8 +38,6 @@ mvn clean install -Dturbo.enabled=false
 ```
 You typically add the plugin to the plugins section of your root pom. 
 
-You find the latest version of the plugin from the master branch build [here](https://digitalbankbyggmaster.test.sparebank1.no/job/turbo-maven-plugin_master/).
-
 #### Building with the plugin enabled
 The first time you do a build, a normal build will be done, and at the same time, the serialized checksums will be written to your maven repo.
 
