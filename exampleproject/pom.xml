@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>exampleproject</groupId>
+    <artifactId>exampleproject</artifactId>
+    <version>${revision}</version>
+
+    <packaging>pom</packaging>
+
+    <organization>
+        <name>Exampleprjoect</name>
+        <url>https://example.project</url>
+    </organization>
+
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+        <java.version>11</java.version>
+        <kotlin.version>1.7.10</kotlin.version>
+        <maven.version>3.6.3</maven.version>
+        <junit-jupiter.version>5.8.2</junit-jupiter.version>
+        <turbo-maven-plugin.version>1.0.0</turbo-maven-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    </properties>
+
+    <modules>
+        <module>modules</module>
+        <module>libs</module>
+    </modules>
+
+    <dependencyManagement>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>no.sparebank1</groupId>
+                <artifactId>turbo-maven-plugin</artifactId>
+                <version>${turbo-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <enabled>true</enabled>
+                    <ignoreChangesInFiles></ignoreChangesInFiles>
+                    <alwaysBuildModules></alwaysBuildModules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <parameters>true</parameters>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>mavencentral</id>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+</project>
