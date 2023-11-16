@@ -17,22 +17,23 @@ public class SourceFileFinder {
         List<String> filesInSrc = findFilesInDirRecursively(projectRoot + "/src");
         sourceFiles.addAll(filesInSrc);
         //Remove files that are configured not to be included:
-        List<String> prunedSourcefiles = pruneSourefiles(sourceFiles, ignoreChangesInFiles);
+        List<String> prunedSourcefiles = pruneSourcefiles(sourceFiles, ignoreChangesInFiles);
 
         return prunedSourcefiles;
     }
 
-    List<String> pruneSourefiles(final List<String> sourcefiles, final String ignoreChangesInFiles) {
+    List<String> pruneSourcefiles(List<String> sourcefiles, String ignoreChangesInFiles) {
+        List<String> ignoredFiles = ignoreChangesInFiles != null ? Arrays.asList(ignoreChangesInFiles.split(",")) : new ArrayList<>();
         List<String> prunedSourcefiles = new ArrayList<>(sourcefiles);
-        sourcefiles.forEach(sourcefile -> {
-            if (sourcefile.contains("swagger.json") ||
-                    sourcefile.contains(".iml") ||
-                    sourcefile.contains("editorconfig") ||
-                    sourcefile.contains("docker-image-id")) {
-                prunedSourcefiles.remove(sourcefile);
-            }
-        });
+        sourcefiles.forEach(sourcefile -> prunedSourcefiles.removeIf(sourceFile -> containsAnyIgnoredFile(sourceFile, ignoredFiles)));
         return prunedSourcefiles;
+    }
+
+    boolean containsAnyIgnoredFile(String sourceFile, List< String > ignoredFiles) {
+        return ignoredFiles.stream()
+                 .anyMatch(ignoredFile -> ignoredFile != null &&
+                         !ignoredFile.trim().isEmpty() &&
+                         sourceFile.contains(ignoredFile));
     }
 
     List<String> findFilesInDir(final String dir) {
