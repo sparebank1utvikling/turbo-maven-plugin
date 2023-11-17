@@ -91,8 +91,8 @@ public class ArtifactAnalyzerTest {
         String path = new File(".").getAbsolutePath();
         ArrayList<String> listOfSources = new ArrayList<>();
         listOfSources.add(path + "/src/test/foo/pom.xml");
-        listOfSources.add(path + "/src/test/foo/bar/bar1.txt");
-        listOfSources.add(path + "/src/test/foo/bar/bar2.txt");
+        listOfSources.add(path + "/src/test/foo/src/bar1.txt");
+        listOfSources.add(path + "/src/test/foo/src/bar2.txt");
         return listOfSources;
     }
 
