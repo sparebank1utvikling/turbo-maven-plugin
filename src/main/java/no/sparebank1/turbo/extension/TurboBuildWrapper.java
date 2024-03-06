@@ -50,7 +50,7 @@ public class TurboBuildWrapper extends AbstractMavenLifecycleParticipant {
 
                 List<MavenProject> projects = session.getProjects();
 
-                List<MavenProject> projectsToBuild = projectsAnalyzer.calculateProjectsToBuild(config.m2Repository, projects, session.getProjectDependencyGraph(), config.ignoreChangesInFiles, config.alwaysBuildModules);
+                List<MavenProject> projectsToBuild = projectsAnalyzer.calculateProjectsToBuild(config.m2Repository, projects, session.getProjectDependencyGraph(), config.ignoreChangesInFiles, config.alwaysBuildModules, config.includeTopDirectories, config.excludeTopDirectories);
 
                 session.setProjects(projectsToBuild);
 
@@ -92,7 +92,7 @@ public class TurboBuildWrapper extends AbstractMavenLifecycleParticipant {
                 projects.forEach(project -> {
                     //Write the checksums when we have a successful build:
                     if(session.getResult().getBuildSummary(project).toString().toLowerCase().contains("success")) {
-                        List<String> sourceFiles = new SourceFileFinder().getSourceFiles(project.getBasedir().getAbsolutePath(), config.ignoreChangesInFiles);
+                        List<String> sourceFiles = new SourceFileFinder().getSourceFiles(project.getBasedir().getAbsolutePath(), project.getModules(), config.ignoreChangesInFiles, config.includeTopDirectories, config.excludeTopDirectories);
                         new Checksums().createAndWriteChecksums(config.m2Repository, sourceFiles, project.getGroupId(), project.getArtifactId(), project.getVersion());
                     }
                 });

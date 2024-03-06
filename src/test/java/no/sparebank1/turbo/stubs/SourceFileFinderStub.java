@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SourceFileFinderStub extends SourceFileFinder {
   @Override
-  public List<String> getSourceFiles(final String projectRoot, final String ignoreChangesInFiles) {
+  public List<String> getSourceFiles(final String projectRoot, final List<String> mvnChildModules, final String ignoreChangesInFiles, final String includeTopDirectories, final String excludeTopDirectories) {
     return new ArrayList<String>();
   }
 }

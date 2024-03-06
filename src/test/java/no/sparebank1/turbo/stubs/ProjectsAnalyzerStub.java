@@ -12,7 +12,7 @@ public class ProjectsAnalyzerStub extends ProjectsAnalyzer {
   }
 
   @Override
-  protected boolean shallBuildProject(final String m2Repository, final MavenProject project, final String ignoreChangesInFiles, final String alwaysBuildModules) {
+  protected boolean shallBuildProject(final String m2Repository, final MavenProject project, final String ignoreChangesInFiles, final String alwaysBuildModules, final String includeTopDirectories, final String excludeTopDirectories) {
     if (alwaysBuildModules.contains(project.getArtifactId())) {
       return true;
     }

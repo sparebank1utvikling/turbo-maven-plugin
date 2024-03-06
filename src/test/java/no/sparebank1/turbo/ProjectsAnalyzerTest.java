@@ -27,7 +27,7 @@ public class ProjectsAnalyzerTest {
   @Test
   public void project_D_shall_have_A_B_C_as_downstream_dependencies() {
 
-    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "D");
+    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "D", "src", "");
     assertEquals(4, projectsToBuild.size());
     assertTrue(projectsToBuild.contains(getMavenProjectWithArtifactId("A")) &&
       projectsToBuild.contains(getMavenProjectWithArtifactId("B")) &&
@@ -37,7 +37,7 @@ public class ProjectsAnalyzerTest {
 
   @Test
   public void project_C_shall_have_A_as_downstream_dependency() {
-    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "C");
+    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "C", "src", "");
     assertEquals(2, projectsToBuild.size());
     assertTrue(projectsToBuild.contains(getMavenProjectWithArtifactId("A")) &&
       projectsToBuild.contains(getMavenProjectWithArtifactId("C")));
@@ -45,7 +45,7 @@ public class ProjectsAnalyzerTest {
 
   @Test
   public void project_B_shall_have_A_as_downstream_dependency() {
-    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "B");
+    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "B", "src", "");
     assertEquals(2, projectsToBuild.size());
     assertTrue(projectsToBuild.contains(getMavenProjectWithArtifactId("A")) &&
       projectsToBuild.contains(getMavenProjectWithArtifactId("B")));
@@ -53,7 +53,7 @@ public class ProjectsAnalyzerTest {
 
   @Test
   public void project_A_shall_have_no_downstream_dependencies() {
-    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "A");
+    List<MavenProject> projectsToBuild = projectAnalyzer.calculateProjectsToBuild("", getProjects(), projectDependencyGraph, "", "A", "src", "");
     assertEquals(1, projectsToBuild.size());
     assertTrue(projectsToBuild.contains(getMavenProjectWithArtifactId("A")));
   }

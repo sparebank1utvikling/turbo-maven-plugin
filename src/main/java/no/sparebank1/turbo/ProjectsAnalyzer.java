@@ -17,11 +17,11 @@ public class ProjectsAnalyzer {
     this.sourceFileFinder = sourceFileFinder;
   }
 
-  public List<MavenProject> calculateProjectsToBuild(final String m2Repository, final List<MavenProject> projects, final ProjectDependencyGraph projectDependencyGraph, final String ignoreChangesInFiles, final String alwaysBuildModules) {
+  public List<MavenProject> calculateProjectsToBuild(final String m2Repository, final List<MavenProject> projects, final ProjectDependencyGraph projectDependencyGraph, final String ignoreChangesInFiles, final String alwaysBuildModules, final String includeTopDirectories, final String excludeTopDirectories) {
 
     //Get the projects that require a new build:
     List<MavenProject> projectsToBuild = projects.stream()
-      .filter(project -> shallBuildProject(m2Repository, project, ignoreChangesInFiles, alwaysBuildModules))
+      .filter(project -> shallBuildProject(m2Repository, project, ignoreChangesInFiles, alwaysBuildModules, includeTopDirectories, excludeTopDirectories))
       .distinct()
       .collect(Collectors.toList());
 
@@ -36,8 +36,8 @@ public class ProjectsAnalyzer {
       .collect(Collectors.toList());
   }
 
-  protected boolean shallBuildProject(final String m2Repository, final MavenProject project, final String ignoreChangesInFiles, final String alwaysBuildModules) {
-    List<String> sourceFiles = sourceFileFinder.getSourceFiles(project.getBasedir().getAbsolutePath(), ignoreChangesInFiles);
+  protected boolean shallBuildProject(final String m2Repository, final MavenProject project, final String ignoreChangesInFiles, final String alwaysBuildModules, final String includeTopDirectories, final String excludeTopDirectories) {
+    List<String> sourceFiles = sourceFileFinder.getSourceFiles(project.getBasedir().getAbsolutePath(), project.getModules(), ignoreChangesInFiles, includeTopDirectories, excludeTopDirectories);
     return artifactAnalyzer.shallBuild(m2Repository, sourceFiles, project.getGroupId(), project.getArtifactId(), project.getVersion(), project.getPackaging(), alwaysBuildModules);
   }
 }

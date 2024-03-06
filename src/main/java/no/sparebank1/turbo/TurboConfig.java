@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Plugin;
 
@@ -21,6 +18,8 @@ public class TurboConfig {
 
     public final boolean enabled;
     public final String ignoreChangesInFiles;
+    public final String includeTopDirectories;
+    public final String excludeTopDirectories;
 
     public final String alwaysBuildModules;
     public final String m2Repository;
@@ -31,6 +30,8 @@ public class TurboConfig {
         String configAsXml = plugin.getConfiguration() != null ? plugin.getConfiguration().toString() : "";
         ignoreChangesInFiles = getParameter(configAsXml, "ignoreChangesInFiles", "");
         alwaysBuildModules = getParameter(configAsXml, "alwaysBuildModules", "");
+        includeTopDirectories = getParameter(configAsXml, "includeTopDirectories", "src");
+        excludeTopDirectories = getParameter(configAsXml, "excludeTopDirectories", "");
 
         m2Repository = session.getLocalRepository().getBasedir();
 
