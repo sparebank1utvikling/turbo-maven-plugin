@@ -8,26 +8,45 @@ import java.util.stream.Collectors;
 
 public class SourceFileFinder {
 
-    public List<String> getSourceFiles(final String projectRoot, final String ignoreChangesInFiles) {
+    public List<String> getSourceFiles(final String projectRoot, final List<String> mvnChildModules, final String ignoreChangesInFiles, final String includeTopDirectories, final String excludeTopDirectories) {
         List<String> sourceFiles = new ArrayList<>();
+        List<String> ignoreFiles = Arrays.asList(ignoreChangesInFiles.split("\\s*,\\s*")); // Split string on comma, ignore spaces
+        List<String> includeTopDirs = Arrays.asList(includeTopDirectories.split("\\s*,\\s*"));
+        List<String> excludeTopDirs = Arrays.asList(excludeTopDirectories.split("\\s*,\\s*"));
+
         //Add all files in projectRoot:
         List<String> filesInProjectRoot = findFilesInDir(projectRoot);
         sourceFiles.addAll(filesInProjectRoot);
-        //Add all files in src recursively:
-        List<String> filesInSrc = findFilesInDirRecursively(projectRoot + "/src");
-        sourceFiles.addAll(filesInSrc);
+
+        //Find all top directories under pom (child) project:
+        List<String> directoriesInDir = findDirectoriesInDir(projectRoot);
+        directoriesInDir.stream()
+                // Include directory if in includedTopDirs or if set to asterix or empty
+                .filter(dir -> includeTopDirs.contains(dir) || includeTopDirs.contains("*"))
+                .filter(dir -> !excludeTopDirs.contains(dir))  // Exclude if in excludeTopDirs
+                .filter(dir -> !mvnChildModules.contains(dir)) // Exclude mvn child modules. I.e. only evaluate current module
+                // Exclude if directory starts with "."
+                .filter(dir -> !dir.startsWith("."))
+                .forEach((dir) -> {
+                    //Add all files in dir recursively
+                    List<String> filesInSrc = findFilesInDirRecursively(projectRoot + "/" + dir);
+                    sourceFiles.addAll(filesInSrc);
+                });
+
         //Remove files that are configured not to be included:
-        List<String> prunedSourcefiles = pruneSourefiles(sourceFiles, ignoreChangesInFiles);
+        List<String> prunedSourcefiles = pruneSourefiles(sourceFiles, ignoreFiles);
 
         return prunedSourcefiles;
     }
 
-    List<String> pruneSourefiles(final List<String> sourcefiles, final String ignoreChangesInFiles) {
+    List<String> pruneSourefiles(final List<String> sourcefiles, final List<String> ignoreFiles) {
         List<String> prunedSourcefiles = new ArrayList<>(sourcefiles);
         sourcefiles.forEach(sourcefile -> {
             if (sourcefile.contains("swagger.json") ||
                     sourcefile.contains(".iml") ||
                     sourcefile.contains("editorconfig") ||
+                    ignoreFiles.stream()
+                            .anyMatch(ignoreFile -> !ignoreFile.equals("") && sourcefile.endsWith(ignoreFile)) ||
                     sourcefile.contains("docker-image-id")) {
                 prunedSourcefiles.remove(sourcefile);
             }
@@ -42,6 +61,15 @@ public class SourceFileFinder {
                 .filter(file -> !file.isDirectory())
                 .map(file -> file.getAbsolutePath()).
                         collect(Collectors.toList());
+    }
+
+    List<String> findDirectoriesInDir(final String dir) {
+        File dirFile = new File(dir);
+        List<File> list = Arrays.asList(dirFile.listFiles());
+        return list.stream()
+                .filter(file -> file.isDirectory())
+                .map(file -> file.getName())
+                .collect(Collectors.toList());
     }
 
     List<String> findFilesInDirRecursively(final String dir) {

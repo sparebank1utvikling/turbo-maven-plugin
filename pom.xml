@@ -6,7 +6,7 @@
     <groupId>no.sparebank1</groupId>
     <artifactId>turbo-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
 
     <name>turbo-maven-plugin Maven Mojo</name>
     <description>
