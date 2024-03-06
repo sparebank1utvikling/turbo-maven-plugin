@@ -11,13 +11,13 @@ A maven plugin that turbo charges your Maven build by only building the projects
  ## Usage
  The plugin has the following parameters:
  
- |parameter name| description                                                                                                                                                                           | default value |
- |------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
- | enabled  | Enables of disables the plugin.                                                                                                                                                       | true          |
- | alwaysBuildModules  | Always build the specified modules. Comma separated. Checked only by doing a contains of the file name in this string                                                                 | empty string  |
- | ignoreChangesInFiles | Skips build even these files have changed. Comma separated. Checked only by doing a contains of the file name in this string                                                          | empty string  |
- | includeTopDirectories | Possibility to specify which top directories under pom (child) project that will be included. Use * to include all. Comma separated. If not used, only src directory will be included | src           |
- | excludeTopDirectories | Possibility to specify which top directories under pom (child) project that will be excluded. Comma separated. If not used, nothing explicit will be excluded                          | empty string  |
+ |parameter name| description                                                                                                                                                                     | default value |
+ |------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+ | enabled  | Enables of disables the plugin.                                                                                                                                                 | true          |
+ | alwaysBuildModules  | Always build the specified modules. Comma separated. Checked only by doing a contains of the file name in this string                                                           | empty string  |
+ | ignoreChangesInFiles | Skips build even these files have changed. Comma separated.                                                                                                                     | empty string  |
+ | includeTopDirectories | Specify which top directories under pom (child) project that will be included in check. Use * to include all. Comma separated. If not used, only src directory will be included | src           |
+ | excludeTopDirectories | Specify which top directories under pom (child) project that will be excluded in check. Comma separated. If not used, nothing explicit will be excluded                         | empty string  |
  
  ### Command line parameters
  The parameters can be set on the command line. They will have precedence over the parameters in the plugin configuration.

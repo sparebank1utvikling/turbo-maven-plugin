@@ -5,7 +5,7 @@
 - Also made it possible to exclude directories. * can not be used. Default if not set, nothing will be excluded.
     ```xml
     <excludeTopDirectories>target,node_modules</excludeTopDirectories>
-- Bugfix so that `ignoreChangesInFiles` can contain more than one file (comma separated).
+- Fix so that `ignoreChangesInFiles` can contain more than one file (comma separated).
 
 ## 1.0.0
 - Initial version
