@@ -1,10 +1,12 @@
 package no.sparebank1.turbo.extension;
 
 import java.util.List;
-
 import no.sparebank1.turbo.ArtifactAnalyzer;
+import no.sparebank1.turbo.Checksums;
 import no.sparebank1.turbo.ProjectsAnalyzer;
+import no.sparebank1.turbo.SnapshotException;
 import no.sparebank1.turbo.SourceFileFinder;
+import no.sparebank1.turbo.TurboConfig;
 import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.execution.MavenSession;
@@ -12,9 +14,6 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
-
-import no.sparebank1.turbo.Checksums;
-import no.sparebank1.turbo.TurboConfig;
 
 /**
  * This wrapper turbo charges your Maven build by reducing the number of maven projects to build.
@@ -50,7 +49,7 @@ public class TurboBuildWrapper extends AbstractMavenLifecycleParticipant {
 
                 List<MavenProject> projects = session.getProjects();
 
-                List<MavenProject> projectsToBuild = projectsAnalyzer.calculateProjectsToBuild(config.m2Repository, projects, session.getProjectDependencyGraph(), config.ignoreChangesInFiles, config.alwaysBuildModules);
+                List<MavenProject> projectsToBuild = projectsAnalyzer.calculateProjectsToBuild(config.m2Repository, projects, session.getProjectDependencyGraph(), config.ignoreChangesInFiles, config.alwaysBuildModules, config.failOnChangedFinalVersion);
 
                 session.setProjects(projectsToBuild);
 
@@ -69,7 +68,8 @@ public class TurboBuildWrapper extends AbstractMavenLifecycleParticipant {
             } else {
                 logger.info("Turbo build is disabled.");
             }
-
+        } catch (SnapshotException e) {
+            throw new MavenExecutionException("Stopping build due to the detection of modified code in a non-SNAPSHOT module.", e);
         } catch (Exception e) {
             System.out.println("Exception during turbo execution in afterProjectsRead, so running regular build. Exception was " + e.getMessage());
         }

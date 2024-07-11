@@ -41,7 +41,7 @@ public class ArtifactAnalyzerTest {
         //Change a source file:
         changeSourefile(listOfSources.get(0));
         //Analyse:
-        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "");
+        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "", false);
         assertTrue(buildArtifact);
         //clean up:
         removeArtifact(M2_REPOSITORY, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING);
@@ -57,7 +57,7 @@ public class ArtifactAnalyzerTest {
         //Serialize it to the artifact repo:
         String pathToChecksums = checksums.writeChecksums(M2_REPOSITORY, checksumsMap, GROUP_ID, ARTIFACT_ID, VERSION);
         //Analyse:
-        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "");
+        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "", false);
         assertFalse(buildArtifact);
         //clean up:
         removeArtifact(M2_REPOSITORY, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING);
@@ -72,7 +72,7 @@ public class ArtifactAnalyzerTest {
         List<String> listOfSources = getListOfSources();
         String alwaysBuildModules = ARTIFACT_ID;
         //Analyse:
-        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, alwaysBuildModules);
+        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, listOfSources, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, alwaysBuildModules, false);
         assertTrue(buildArtifact);
         //clean up:
         removeArtifact(M2_REPOSITORY, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING);
@@ -83,7 +83,7 @@ public class ArtifactAnalyzerTest {
         //Remove artifact to m2 repo to make sure it is not there:
         removeArtifact(M2_REPOSITORY, GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING);
 
-        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, Collections.emptyList(), GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "");
+        boolean buildArtifact = artifactAnalyzer.shallBuild(M2_REPOSITORY, Collections.emptyList(), GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, "", false);
         assertTrue(buildArtifact);
     }
 

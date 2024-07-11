@@ -15,9 +15,7 @@ public class ArtifactAnalyzer {
         this.checksums = checksums;
     }
 
-    ;
-
-    public boolean shallBuild(final String m2repository, final List<String> sourcefiles, final String groupId, final String artifactId, final String version, final String packaging, final String alwaysBuildModules) {
+    public boolean shallBuild(final String m2repository, final List<String> sourcefiles, final String groupId, final String artifactId, final String version, final String packaging, final String alwaysBuildModules, final boolean failOnChangedFinalVersion) {
 
         if (sourcefiles.isEmpty()) {
             //Throw exception here - this shall never happen?
@@ -39,6 +37,11 @@ public class ArtifactAnalyzer {
 
         if (!currentChecksums.equals(artifactChecksums)) {
             logger.info("Checksums have changed for " + artifactId);
+
+            if (failOnChangedFinalVersion && !version.endsWith("-SNAPSHOT")) {
+                throw new SnapshotException("Modifying code on a final version is not allowed. Please update your module's pom.xml to the next -SNAPSHOT version for artifact '" + artifactId + "'");
+            }
+
             return true;
         }
 

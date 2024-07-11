@@ -21,6 +21,7 @@ public class TurboConfig {
 
     public final boolean enabled;
     public final String ignoreChangesInFiles;
+    public final boolean failOnChangedFinalVersion;
 
     public final String alwaysBuildModules;
     public final String m2Repository;
@@ -37,6 +38,7 @@ public class TurboConfig {
         List<String> goals = session.getGoals();
 
         enabled = shallNotRun(m2Repository, goals) ? false : Boolean.valueOf(getParameter(configAsXml, "enabled", "true"));
+        failOnChangedFinalVersion = Boolean.valueOf(getParameter(configAsXml, "failOnChangedFinalVersion", "true"));
     }
 
     static boolean shallNotRun(final String m2Repository, final List<String> goals) {
